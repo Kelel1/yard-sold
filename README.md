@@ -1,0 +1,1 @@
+Backend GraphQl server for Yard Sold web-app
