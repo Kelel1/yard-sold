@@ -1,0 +1,19 @@
+{
+  "name": "yard-sold",
+  "version": "1.0.0",
+  "description": "Backend GraphQL server for Yard Sold web app ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kelel1/yard-sold.git"
+  },
+  "author": "Kern Elder",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kelel1/yard-sold/issues"
+  },
+  "homepage": "https://github.com/Kelel1/yard-sold#readme"
+}
