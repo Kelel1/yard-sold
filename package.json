@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/Kelel1/yard-sold/issues"
   },
-  "homepage": "https://github.com/Kelel1/yard-sold#readme"
+  "homepage": "https://github.com/Kelel1/yard-sold#readme",
+  "dependencies": {
+    "apollo-server": "^2.15.0",
+    "graphql": "^15.2.0"
+  }
 }
