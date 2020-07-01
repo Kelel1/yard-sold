@@ -4,18 +4,23 @@ const typeDefs = gql`
   type Vendor {
     name: String!
     phone: String        
-    items: [Item]
+    email: String!
+    Address: String
+    items: [Item!]
+    customers: ???
+    id: ID!
   }
 
   type Item {
     name: String!
     price: String!
+    pictures: ???
     id: ID!
   }
   
 
   type Query {
-    vendorCount: Int!
+    itemCount: Int!
   }
 `
 const resolvers = {
