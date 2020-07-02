@@ -22,7 +22,7 @@ const typeDefs = gql`
   
 
   type Query {
-    itemCount: Int!
+    itemCount: Int!    
   }
 `
 const resolvers = {
