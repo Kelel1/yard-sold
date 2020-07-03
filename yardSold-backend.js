@@ -1,13 +1,15 @@
 const { ApolloServer, gql } = require('apollo-server')
 
+/**
+ *  May have to add customer array for Vendor
+ */
 const typeDefs = gql`
   type Vendor {
     name: String!
     phone: String        
     email: String!
-    Address: String
+    address: String
     items: [Item!]
-    customers: ???
     id: ID!
   }
 
