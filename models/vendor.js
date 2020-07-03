@@ -23,7 +23,8 @@ const schema = new mongoose.Schema({
     minlength: 5
   },
   items: {
-    type: [Item]
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Item'
   },
 })
 
