@@ -1,5 +1,9 @@
 const mongoose = require('mongoose')
 
+/**
+ * Monggos Schema for Vendor
+ */
+
 const schema = new mongoose.Schema({
   name: {
     type: String,
