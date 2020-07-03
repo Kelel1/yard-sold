@@ -1,4 +1,13 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { v1: uuid }          = require('uuid')
+
+let vendors = [
+
+]
+
+let items = [
+  
+]
 
 /**
  *  May have to add customer array for Vendor
@@ -29,7 +38,7 @@ const typeDefs = gql`
 `
 const resolvers = {
   Query: {
-
+    itemCount: () => 4,
   }
 }
 
