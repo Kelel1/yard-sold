@@ -1,5 +1,6 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, gql } = require('apollo-server-express')
 const { v1: uuid }          = require('uuid')
+const express               = require('express')
 
 let vendors = [
   {
@@ -86,6 +87,9 @@ const server = new ApolloServer({
   resolvers,
 })
 
-server.listen().then(({ url }) => {
-  console.log(`Server ready at ${url}`)
-})
+const app = express()
+server.applyMiddleware({ app })
+
+app.listen({ port: 4000 }, () =>
+  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+)
