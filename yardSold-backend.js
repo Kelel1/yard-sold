@@ -45,8 +45,7 @@ const typeDefs = gql`
     images: [String!]
     description: String
     id: ID!
-  }
-  
+  }  
 
   type Query {
     itemCount: Int!    
@@ -55,6 +54,16 @@ const typeDefs = gql`
     findItem(name: String!): Item
     totalUniqueItems: Int!
   }
+
+  type Mutation {
+    addItem(
+      name: String!
+      price: Float!
+      inventoryCount: Int!
+      images: [String!]
+      description: String!
+    ): Item
+  }
 `
 const resolvers = {
   Query: {
@@ -62,6 +71,14 @@ const resolvers = {
     allItems: () => items,
     allVendors: () => vendors,
     totalUniqueItems: () => items.length     
+  },
+
+  Mutation: {
+    addItem: (root, args) => {
+      const item = { ...args, id: uuid() }
+      items = items.concat(item)
+      return item
+    }
   }
 }
 
