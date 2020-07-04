@@ -22,10 +22,10 @@ const schema = new mongoose.Schema({
     type: String,
     minlength: 5
   },
-  items: {
+  items: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Item'
-  },
+  }],
 })
 
 module.exports = mongoose.model('Vendor', schema)

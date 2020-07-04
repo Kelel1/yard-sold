@@ -51,12 +51,17 @@ const typeDefs = gql`
   type Query {
     itemCount: Int!    
     allItems: [Item!]!
+    allVendors: [Vendor!]!
+    findItem(name: String!): Item
+    totalUniqueItems: Int!
   }
 `
 const resolvers = {
   Query: {
     itemCount: () => 4,
-    allItems: () => items, 
+    allItems: () => items,
+    allVendors: () => vendors,
+    totalUniqueItems: () => items.length     
   }
 }
 
