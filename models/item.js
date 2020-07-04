@@ -19,7 +19,7 @@ const schema = new mongoose.Schema({
   },
   images: {
     type: [
-      { type: String }
+      { data: Buffer, contentType: String }
     ],
   },
   description: {
@@ -27,4 +27,4 @@ const schema = new mongoose.Schema({
   }
 })
 
-module,exports = mongoose.model('Item', schema)
+module.exports = mongoose.model('Item', schema)
