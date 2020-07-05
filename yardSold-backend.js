@@ -14,12 +14,17 @@ let vendors = [
 
 ]
 
+/**
+ * Item must upload image to Amazon S3 bucket
+ */
+
 let items = [
   {
     name: "Shadow Tactics",
     price: 3.99,
     inventoryCount: 5,
     description: "Top-Down stealth Playstation 4 game, set in medival Japan",
+    images: [],
     id: "afa5b6f5-344d-11e9-a414-719c6709cf3e",
   }
 
