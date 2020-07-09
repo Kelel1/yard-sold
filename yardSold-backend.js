@@ -68,6 +68,7 @@ const typeDefs = gql`
       images: [String!]
       description: String!
     ): Item
+    uploadImage(image: Upload!): Boolean
   }
 `
 const resolvers = {
@@ -83,7 +84,7 @@ const resolvers = {
       const item = { ...args, id: uuid() }
       items = items.concat(item)
       return item
-    }
+    }    
   }
 }
 
