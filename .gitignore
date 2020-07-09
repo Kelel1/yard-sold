@@ -1,2 +1,4 @@
 node_modules/
+testUpload/
 package-lock.json
+.env
