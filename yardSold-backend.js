@@ -1,6 +1,15 @@
 const { ApolloServer, gql } = require('apollo-server-express')
 const { v1: uuid }          = require('uuid')
 const express               = require('express')
+const cloudinary            = require('cloudinary')
+require('dotenv').config()
+
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+})
 
 let vendors = [
   {
@@ -15,7 +24,7 @@ let vendors = [
 ]
 
 /**
- * Item must upload image to Amazon S3 bucket
+ * Item must upload image to cloudinary bucket
  */
 
 let items = [
@@ -68,7 +77,7 @@ const typeDefs = gql`
       images: [String!]
       description: String!
     ): Item
-    uploadImage(image: Upload!): Boolean
+    uploadImage(image: String!, itemName: String!): Boolean
   }
 `
 const resolvers = {
@@ -77,6 +86,7 @@ const resolvers = {
     allItems: () => items,
     allVendors: () => vendors,
     totalUniqueItems: () => items.length     
+    
   },
 
   Mutation: {
@@ -84,6 +94,22 @@ const resolvers = {
       const item = { ...args, id: uuid() }
       items = items.concat(item)
       return item
+    },
+    uploadImage:  async (root, args) => {
+      args = `./testUpload/${args.image}`
+      console.log(`${args}`)
+
+      try {
+        const photo = await cloudinary.v2.uploader.upload(args)
+        // console.log(photo)
+        console.log('Store in item images array: ',photo.secure_url)
+        let shadow  = items.find(a => a.name === `${args.itemName}`)
+        shadow.images.push(photo.secure_url)
+        return true
+      } catch(error) {
+          return false
+
+      }
     }    
   }
 }
