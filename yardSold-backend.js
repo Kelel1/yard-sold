@@ -1,9 +1,30 @@
 const { ApolloServer, gql } = require('apollo-server-express')
+const mongoose              = require('mongoose')
 const { v1: uuid }          = require('uuid')
 const express               = require('express')
 const cloudinary            = require('cloudinary')
 require('dotenv').config()
 
+
+// Establish connection to Database
+mongoose.set('useFindAndModify', false)
+
+console.log('connecting to', process.env.MONGODB_URI)
+
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connecting to MongoDB:', error.message)
+  })
+/**
+ * To Do:
+ * 1. Tie the ability to create/upload items to each vendor
+ * 2. Implement ability to edit details of vendor/item
+ * 3. Implement vendor athorization and tie to items uploaded
+ * 
+ */
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -39,9 +60,7 @@ let items = [
 
 ]
 
-/**
- *  May have to add customer array for Vendor
- */
+
 const typeDefs = gql`
   type Vendor {
     name: String!
@@ -111,8 +130,9 @@ const resolvers = {
         shadow.images.push(photo.secure_url)
         return true
       } catch(error) {
-          return false
-
+        // Find out why this is returning false even when image successfully uploaded.
+        console.log('Kern, error: ', error.message)
+        return false
       }
     }    
   }
