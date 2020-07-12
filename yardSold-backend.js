@@ -24,7 +24,8 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
  * To Do:
  * 1. Tie the ability to create/upload items to each vendor
  * 2. Implement ability to edit details of vendor/item
- * 3. Implement vendor athorization and tie to items uploaded
+ * 3. Implement vendor athorization and tie to items uploaded to specific vendor
+ * 4. Implement error handeling
  * 
  */
 
