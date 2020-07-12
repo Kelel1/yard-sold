@@ -60,6 +60,8 @@ const typeDefs = gql`
     inventoryCount: Int!
     images: [String!]
     description: String
+    onHold: Boolean!
+    totalOnHold: Int!
     id: ID!
   }  
 
