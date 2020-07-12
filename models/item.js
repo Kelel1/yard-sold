@@ -22,6 +22,12 @@ const schema = new mongoose.Schema({
   },
   description: {
     type: String,
+  },
+  onHold: {
+    type: Boolean,
+  }, 
+  totalOnHold: {
+    type: Number,
   }
 })
 

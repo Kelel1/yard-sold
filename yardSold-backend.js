@@ -1,8 +1,10 @@
-const { ApolloServer, gql } = require('apollo-server-express')
+const { ApolloServer, gql, UserInputError } = require('apollo-server-express')
 const mongoose              = require('mongoose')
 const { v1: uuid }          = require('uuid')
 const express               = require('express')
 const cloudinary            = require('cloudinary')
+const Item                  = require('./models/item')
+const Vendor                = require('./models/vendor')
 require('dotenv').config()
 
 
@@ -99,7 +101,9 @@ const typeDefs = gql`
       inventoryCount: Int!
       images: [String!]
       description: String!
-    ): Item
+      onHold: Boolean!
+      totalOnHold: Int!
+    ): Item,
     uploadImage(image: String!, itemName: String!): Boolean
   }
 `
@@ -113,8 +117,16 @@ const resolvers = {
   },
 
   Mutation: {
-    addItem: (root, args) => {
-      const item = { ...args, id: uuid() }
+    addItem:  async (root, args) => {
+      const item = new Item({ ...args, id: uuid() })
+      try {
+        await item.save()
+        // Try implementing this catch for upLoad image to see if it resolves issue
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
       items = items.concat(item)
       return item
     },
