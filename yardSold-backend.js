@@ -45,10 +45,12 @@ let items = [
 const typeDefs = gql`
   type Vendor {
     name: String!
-    phone: String        
+    phone: String!        
     email: String!
     address: String
     items: [Item!]
+    description: String!,
+    profilePic: String!
     id: ID!
   }
 
