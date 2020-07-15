@@ -10,6 +10,7 @@ require('dotenv').config()
 
 // Establish connection to Database
 mongoose.set('useFindAndModify', false)
+mongoose.set('useCreateIndex', true)
 
 console.log('connecting to', process.env.MONGODB_URI)
 
