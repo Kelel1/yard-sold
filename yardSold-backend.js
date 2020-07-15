@@ -77,6 +77,10 @@ const typeDefs = gql`
     id: ID!
   }
 
+  type Token {
+    value: String!
+  }
+
   type Item {
     name: String!
     price: Float!
@@ -94,6 +98,7 @@ const typeDefs = gql`
     allVendors: [Vendor!]!
     findItem(name: String!): Item
     totalUniqueItems: Int!
+    me: Vendor
   }
 
   type Mutation {
@@ -105,7 +110,7 @@ const typeDefs = gql`
       description: String!
       onHold: Boolean!
       totalOnHold: Int!
-    ): Item,
+    ): Item
     uploadImage(image: String!, itemName: String!): Boolean
   }
 `
