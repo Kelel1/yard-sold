@@ -4,7 +4,7 @@ const { v1: uuid }          = require('uuid')
 const express               = require('express')
 const cloudinary            = require('cloudinary')
 const Item                  = require('./models/item')
-const Vendor                = require('./models/vendor')
+// const Vendor                = require('./models/vendor')
 require('dotenv').config()
 
 
@@ -66,7 +66,7 @@ let items = [
 
 
 const typeDefs = gql`
-  type Vendor {
+  type Vendor {   
     name: String!
     phone: String!        
     email: String!
@@ -77,9 +77,7 @@ const typeDefs = gql`
     id: ID!
   }
 
-  type Token {
-    value: String!
-  }
+ 
 
   type Item {
     name: String!
@@ -98,7 +96,7 @@ const typeDefs = gql`
     allVendors: [Vendor!]!
     findItem(name: String!): Item
     totalUniqueItems: Int!
-    me: Vendor
+ 
   }
 
   type Mutation {
@@ -111,7 +109,10 @@ const typeDefs = gql`
       onHold: Boolean!
       totalOnHold: Int!
     ): Item
+
     uploadImage(image: String!, itemName: String!): Boolean
+
+    
   }
 `
 const resolvers = {
