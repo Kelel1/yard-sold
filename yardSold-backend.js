@@ -1,6 +1,40 @@
-const { ApolloServer, gql } = require('apollo-server-express')
+const { ApolloServer, gql, UserInputError } = require('apollo-server-express')
+const mongoose              = require('mongoose')
 const { v1: uuid }          = require('uuid')
 const express               = require('express')
+const cloudinary            = require('cloudinary')
+const Item                  = require('./models/item')
+// const Vendor                = require('./models/vendor')
+require('dotenv').config()
+
+
+// Establish connection to Database
+mongoose.set('useFindAndModify', false)
+mongoose.set('useCreateIndex', true)
+
+console.log('connecting to', process.env.MONGODB_URI)
+
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connecting to MongoDB:', error.message)
+  })
+/**
+ * To Do:
+ * 1. Tie the ability to create/upload items to each vendor
+ * 2. Implement ability to edit details of vendor/item
+ * 3. Implement vendor athorization and tie to items uploaded to specific vendor
+ * 4. Implement error handeling
+ * 
+ */
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+})
 
 let vendors = [
   {
@@ -15,7 +49,7 @@ let vendors = [
 ]
 
 /**
- * Item must upload image to Amazon S3 bucket
+ * Item must upload image to cloudinary bucket
  */
 
 let items = [
@@ -30,18 +64,20 @@ let items = [
 
 ]
 
-/**
- *  May have to add customer array for Vendor
- */
+
 const typeDefs = gql`
-  type Vendor {
+  type Vendor {   
     name: String!
-    phone: String        
+    phone: String!        
     email: String!
     address: String
     items: [Item!]
+    description: String!,
+    profilePic: String!
     id: ID!
   }
+
+ 
 
   type Item {
     name: String!
@@ -49,6 +85,8 @@ const typeDefs = gql`
     inventoryCount: Int!
     images: [String!]
     description: String
+    onHold: Boolean!
+    totalOnHold: Int!
     id: ID!
   }  
 
@@ -58,6 +96,7 @@ const typeDefs = gql`
     allVendors: [Vendor!]!
     findItem(name: String!): Item
     totalUniqueItems: Int!
+ 
   }
 
   type Mutation {
@@ -67,8 +106,13 @@ const typeDefs = gql`
       inventoryCount: Int!
       images: [String!]
       description: String!
+      onHold: Boolean!
+      totalOnHold: Int!
     ): Item
-    uploadImage(image: Upload!): Boolean
+
+    uploadImage(image: String!, itemName: String!): Boolean
+
+    
   }
 `
 const resolvers = {
@@ -77,13 +121,39 @@ const resolvers = {
     allItems: () => items,
     allVendors: () => vendors,
     totalUniqueItems: () => items.length     
+    
   },
 
   Mutation: {
-    addItem: (root, args) => {
-      const item = { ...args, id: uuid() }
+    addItem:  async (root, args) => {
+      const item = new Item({ ...args, id: uuid() })
+      try {
+        await item.save()
+        // Try implementing this catch for upLoad image to see if it resolves issue
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
       items = items.concat(item)
       return item
+    },
+    uploadImage:  async (root, args) => {
+      args = `./testUpload/${args.image}`
+      console.log(`${args}`)
+
+      try {
+        const photo = await cloudinary.v2.uploader.upload(args)
+        // console.log(photo)
+        console.log('Store in item images array: ',photo.secure_url)
+        let shadow  = items.find(a => a.name === `${args.itemName}`)
+        shadow.images.push(photo.secure_url)
+        return true
+      } catch(error) {
+        // Find out why this is returning false even when image successfully uploaded.
+        console.log('Kern, error: ', error.message)
+        return false
+      }
     }    
   }
 }

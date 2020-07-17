@@ -1,4 +1,4 @@
-const mongoose     = require('mongoose')
+const mongoose = require('mongoose')
 
 /**
  * Monggos Schema for Item
@@ -22,6 +22,12 @@ const schema = new mongoose.Schema({
   },
   description: {
     type: String,
+  },
+  onHold: {
+    type: Boolean,
+  }, 
+  totalOnHold: {
+    type: Number,
   }
 })
 
