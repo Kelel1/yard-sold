@@ -152,6 +152,7 @@ const resolvers = {
       try {
         await item.save()
         // Try implementing this catch for upLoad image to see if it resolves issue
+        currentVendor.items = currentVendor.items.concat(item)
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args,
