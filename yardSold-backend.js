@@ -4,7 +4,9 @@ const { v1: uuid }          = require('uuid')
 const express               = require('express')
 const cloudinary            = require('cloudinary')
 const Item                  = require('./models/item')
-// const Vendor                = require('./models/vendor')
+const Vendor                = require('./models/vendor')
+const bcrypt                = require('bcrypt')
+const jwt                   = require('jsonwebtoken')
 require('dotenv').config()
 
 
@@ -67,6 +69,7 @@ let items = [
 
 const typeDefs = gql`
   type Vendor {   
+    username: String!
     name: String!
     phone: String!        
     email: String!
@@ -77,7 +80,9 @@ const typeDefs = gql`
     id: ID!
   }
 
- 
+  type Token {
+    value: String!
+  }
 
   type Item {
     name: String!
@@ -96,6 +101,7 @@ const typeDefs = gql`
     allVendors: [Vendor!]!
     findItem(name: String!): Item
     totalUniqueItems: Int!
+    me: Vendor
  
   }
 
@@ -111,6 +117,15 @@ const typeDefs = gql`
     ): Item
 
     uploadImage(image: String!, itemName: String!): Boolean
+
+    createVendor(
+      username: String!
+      password: String!
+    ): Vendor
+    login(
+      username: String!
+      password: String!
+    ): Token
 
     
   }
@@ -154,6 +169,35 @@ const resolvers = {
         console.log('Kern, error: ', error.message)
         return false
       }
+    },
+    createVendor: (root, args) => {
+      const saltRounds = 10
+      const paswordHash = await bcrypt.hash(args.password, saltRounds)
+      const vendor = new Vendor({ username: args.username, paswordHash })
+
+      return vendor.save()
+        .catch(error => {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
+        })
+    },
+    login: async (root,args) => {
+      const vendor = await Vendor.findOne({ username: args.username })
+      const passwordCorrect = vendor === null
+        ? false
+        : await bcrypt.compare(args.password, vendor.paswordHash)
+
+      if (!(vendor && passwordCorrect)) {
+        throw new UserInputError("Wrong credentials!")
+      }
+
+      const vendorForToken = {
+        username: vendor.username,
+        id: vendor._id,
+      }
+
+      return { value: jwt.sign(vendorForToken, process.env.JWT_SECRET) }
     }    
   }
 }
