@@ -1,4 +1,4 @@
-const { ApolloServer, gql, UserInputError } = require('apollo-server-express')
+const { ApolloServer, gql, UserInputError, AuthenticationError } = require('apollo-server-express')
 const mongoose              = require('mongoose')
 const { v1: uuid }          = require('uuid')
 const express               = require('express')
@@ -127,9 +127,7 @@ const typeDefs = gql`
     login(
       username: String!
       password: String!
-    ): Token
-
-    
+    ): Token    
   }
 `
 const resolvers = {
@@ -144,8 +142,13 @@ const resolvers = {
   },
 
   Mutation: {
-    addItem:  async (root, args) => {
+    addItem:  async (root, args, context) => {
       const item = new Item({ ...args, id: uuid() })
+      const currentVendor = context.currentVendor
+
+      if (!currentVendor) {
+        throw new AuthenticationError("Not authenticated")
+      }
       try {
         await item.save()
         // Try implementing this catch for upLoad image to see if it resolves issue
