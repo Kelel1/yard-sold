@@ -72,12 +72,13 @@ let items = [
 const typeDefs = gql`
   type Vendor {   
     username: String!
+    password: String!
     name: String!
     phone: String!        
     email: String!
     address: String
     items: [Item!]
-    description: String!,
+    description: String!
     profilePic: String!
     id: ID!
   }
@@ -123,6 +124,13 @@ const typeDefs = gql`
     createVendor(
       username: String!
       password: String!
+      name: String
+      phone: String     
+      email: String
+      address: String
+      items: [String!]
+      description: String
+      profilePic: String
     ): Vendor
     login(
       username: String!
@@ -181,7 +189,7 @@ const resolvers = {
     createVendor: async (root, args) => {
       const saltRounds = 10
       const passwordHash = await bcrypt.hash(args.password, saltRounds)
-      const vendor = new Vendor({ username: args.username, passwordHash })
+      const vendor = new Vendor({ ...args, username: args.username, passwordHash })
 
       return vendor.save()
         .catch(error => {
