@@ -170,7 +170,7 @@ const resolvers = {
         return false
       }
     },
-    createVendor: (root, args) => {
+    createVendor: async (root, args) => {
       const saltRounds = 10
       const paswordHash = await bcrypt.hash(args.password, saltRounds)
       const vendor = new Vendor({ username: args.username, paswordHash })
