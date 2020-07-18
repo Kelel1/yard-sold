@@ -8,6 +8,7 @@ const schema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
+    unique: true,
   },
   passwordHash: {
     type: String,
@@ -15,7 +16,6 @@ const schema = new mongoose.Schema({
   },
   name: {
     type: String,
-    unique: true,
   },
   phone: {
     type: String,

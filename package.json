@@ -21,7 +21,7 @@
     "bcrypt": "^5.0.0",
     "cloudinary": "^1.22.0",
     "dotenv": "^8.2.0",
-    "graphql": "^15.2.0",
+    "graphql": "^15.3.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.25",
     "mongoose-unique-validator": "^2.0.3",
