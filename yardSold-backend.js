@@ -137,8 +137,10 @@ const resolvers = {
     itemCount: () => 4,
     allItems: () => items,
     allVendors: () => vendors,
-    totalUniqueItems: () => items.length     
-    
+    totalUniqueItems: () => items.length,
+    me: (root, args, context) => {
+      return context.currentVendor
+    }    
   },
 
   Mutation: {
