@@ -4,7 +4,9 @@ const { v1: uuid }          = require('uuid')
 const express               = require('express')
 const cloudinary            = require('cloudinary')
 const Item                  = require('./models/item')
-// const Vendor                = require('./models/vendor')
+const Vendor                = require('./models/vendor')
+const jwt                   = require('jsonwebtoken')
+
 require('dotenv').config()
 
 
@@ -67,17 +69,21 @@ let items = [
 
 const typeDefs = gql`
   type Vendor {   
+    username: String!
+    password: String!
     name: String!
     phone: String!        
     email: String!
     address: String
     items: [Item!]
-    description: String!,
+    description: String!
     profilePic: String!
     id: ID!
   }
-
- 
+  
+  type Token {
+    value: String!
+  }
 
   type Item {
     name: String!
@@ -96,7 +102,7 @@ const typeDefs = gql`
     allVendors: [Vendor!]!
     findItem(name: String!): Item
     totalUniqueItems: Int!
- 
+    me: Vendor 
   }
 
   type Mutation {
@@ -110,9 +116,17 @@ const typeDefs = gql`
       totalOnHold: Int!
     ): Item
 
-    uploadImage(image: String!, itemName: String!): Boolean
+    uploadImage(image: String! itemName: String!): Boolean
 
-    
+    createVendor(
+      username: String!
+      password: String!      
+    ): Vendor
+
+    login(
+      username: String!
+      password: String!
+    ): Token     
   }
 `
 const resolvers = {
@@ -154,6 +168,9 @@ const resolvers = {
         console.log('Kern, error: ', error.message)
         return false
       }
+    },
+    createVendor: (root, args) => {
+      const vendor = new Vendor({})
     }    
   }
 }
