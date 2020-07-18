@@ -40,6 +40,8 @@ cloudinary.config({
 
 let vendors = [
   {
+    username: "Kelel",
+    password: "kelder",
     name: "Kane Elder",
     phone: "948-555-4974",
     email: "kelxty@gmail.com",
@@ -182,7 +184,7 @@ const resolvers = {
           })
         })
     },
-    login: async (root,args) => {
+    login: async (root, args) => {
       const vendor = await Vendor.findOne({ username: args.username })
       const passwordCorrect = vendor === null
         ? false
@@ -205,6 +207,16 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: async ({ req }) => {
+    const auth = req ? req.headers.authorization : null
+    if (auth && auth.toLowerCase().startsWith('bearer ')) {
+      const decodedToken = jwt.verify(
+        auth.substring(7), process.env.JWT_SECRET
+      )
+      const currentVendor = await Vendor.findById(decodedToken.id).populate('items')
+      return { currentVendor }
+    }
+  }
 })
 
 const app = express()
