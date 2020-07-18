@@ -180,8 +180,8 @@ const resolvers = {
     },
     createVendor: async (root, args) => {
       const saltRounds = 10
-      const paswordHash = await bcrypt.hash(args.password, saltRounds)
-      const vendor = new Vendor({ username: args.username, paswordHash })
+      const passwordHash = await bcrypt.hash(args.password, saltRounds)
+      const vendor = new Vendor({ username: args.username, passwordHash })
 
       return vendor.save()
         .catch(error => {
@@ -194,7 +194,7 @@ const resolvers = {
       const vendor = await Vendor.findOne({ username: args.username })
       const passwordCorrect = vendor === null
         ? false
-        : await bcrypt.compare(args.password, vendor.paswordHash)
+        : await bcrypt.compare(args.password, vendor.passwordHash)
 
       if (!(vendor && passwordCorrect)) {
         throw new UserInputError("Wrong credentials!")
@@ -204,7 +204,6 @@ const resolvers = {
         username: vendor.username,
         id: vendor._id,
       }
-
       return { value: jwt.sign(vendorForToken, process.env.JWT_SECRET) }
     }    
   }
