@@ -1,12 +1,12 @@
-const { ApolloServer, gql, UserInputError } = require('apollo-server-express')
+const { ApolloServer, gql, UserInputError, AuthenticationError } = require('apollo-server-express')
 const mongoose              = require('mongoose')
 const { v1: uuid }          = require('uuid')
 const express               = require('express')
 const cloudinary            = require('cloudinary')
 const Item                  = require('./models/item')
 const Vendor                = require('./models/vendor')
+const bcrypt                = require('bcrypt')
 const jwt                   = require('jsonwebtoken')
-
 require('dotenv').config()
 
 
@@ -40,6 +40,8 @@ cloudinary.config({
 
 let vendors = [
   {
+    username: "Kelel",
+    password: "kelder",
     name: "Kane Elder",
     phone: "948-555-4974",
     email: "kelxty@gmail.com",
@@ -80,7 +82,6 @@ const typeDefs = gql`
     profilePic: String!
     id: ID!
   }
-  
   type Token {
     value: String!
   }
@@ -102,7 +103,8 @@ const typeDefs = gql`
     allVendors: [Vendor!]!
     findItem(name: String!): Item
     totalUniqueItems: Int!
-    me: Vendor 
+    me: Vendor
+ 
   }
 
   type Mutation {
@@ -120,13 +122,19 @@ const typeDefs = gql`
 
     createVendor(
       username: String!
-      password: String!      
+      password: String!
+      name: String
+      phone: String     
+      email: String
+      address: String
+      items: [String!]
+      description: String
+      profilePic: String
     ): Vendor
-
     login(
       username: String!
       password: String!
-    ): Token     
+    ): Token    
   }
 `
 const resolvers = {
@@ -134,16 +142,24 @@ const resolvers = {
     itemCount: () => 4,
     allItems: () => items,
     allVendors: () => vendors,
-    totalUniqueItems: () => items.length     
-    
+    totalUniqueItems: () => items.length,
+    me: (root, args, context) => {
+      return context.currentVendor
+    }    
   },
 
   Mutation: {
-    addItem:  async (root, args) => {
+    addItem:  async (root, args, context) => {
       const item = new Item({ ...args, id: uuid() })
+      const currentVendor = context.currentVendor
+
+      if (!currentVendor) {
+        throw new AuthenticationError("Not authenticated")
+      }
       try {
         await item.save()
         // Try implementing this catch for upLoad image to see if it resolves issue
+        currentVendor.items = currentVendor.items.concat(item)
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args,
@@ -169,8 +185,33 @@ const resolvers = {
         return false
       }
     },
-    createVendor: (root, args) => {
-      const vendor = new Vendor({})
+    createVendor: async (root, args) => {
+      const saltRounds = 10
+      const passwordHash = await bcrypt.hash(args.password, saltRounds)
+      const vendor = new Vendor({ ...args, username: args.username, passwordHash })
+
+      return vendor.save()
+        .catch(error => {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
+        })
+    },
+    login: async (root, args) => {
+      const vendor = await Vendor.findOne({ username: args.username })
+      const passwordCorrect = vendor === null
+        ? false
+        : await bcrypt.compare(args.password, vendor.passwordHash)
+
+      if (!(vendor && passwordCorrect)) {
+        throw new UserInputError("Wrong credentials!")
+      }
+
+      const vendorForToken = {
+        username: vendor.username,
+        id: vendor._id,
+      }
+      return { value: jwt.sign(vendorForToken, process.env.JWT_SECRET) }
     }    
   }
 }
@@ -178,6 +219,16 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: async ({ req }) => {
+    const auth = req ? req.headers.authorization : null
+    if (auth && auth.toLowerCase().startsWith('bearer ')) {
+      const decodedToken = jwt.verify(
+        auth.substring(7), process.env.JWT_SECRET
+      )
+      const currentVendor = await Vendor.findById(decodedToken.id).populate('items')
+      return { currentVendor }
+    }
+  }
 })
 
 const app = express()
