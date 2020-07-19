@@ -37,7 +37,7 @@ cloudinary.config({
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET
 })
-
+// Test vendor's list
 let vendors = [
   {
     username: "Kelel",
@@ -55,7 +55,7 @@ let vendors = [
 /**
  * Item must upload image to cloudinary bucket
  */
-
+// Test Item's list
 let items = [
   {
     name: "Shadow Tactics",
@@ -160,12 +160,13 @@ const resolvers = {
         await item.save()
         // Try implementing this catch for upLoad image to see if it resolves issue
         currentVendor.items = currentVendor.items.concat(item)
+        await currentVendor.save()
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args,
         })
       }
-      items = items.concat(item)
+      // items = items.concat(item)
       return item
     },
     uploadImage:  async (root, args) => {
