@@ -7,6 +7,7 @@ const Item                  = require('./models/item')
 const Vendor                = require('./models/vendor')
 const bcrypt                = require('bcrypt')
 const jwt                   = require('jsonwebtoken')
+const cors                  = require('cors')
 require('dotenv').config()
 
 
@@ -233,6 +234,7 @@ const server = new ApolloServer({
 })
 
 const app = express()
+app.use(cors())
 server.applyMiddleware({ app })
 
 app.listen({ port: 4000 }, () =>
