@@ -89,7 +89,7 @@ const typeDefs = gql`
 
   type Item {
     name: String!
-    price: Float!
+    price: String!
     inventoryCount: Int!
     images: [String!]
     description: String
@@ -111,7 +111,7 @@ const typeDefs = gql`
   type Mutation {
     addItem(
       name: String!
-      price: Float!
+      price: String!
       inventoryCount: Int!
       images: [String!]
       description: String!

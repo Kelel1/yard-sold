@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
     required: true,
   },
   price: {
-    type: mongoose.Schema.Types.Decimal128,
+    type: String,
     required: true,
   },
   inventoryCount: {
