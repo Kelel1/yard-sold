@@ -212,7 +212,7 @@ const resolvers = {
       const vendor = await Vendor.findOne({ username: args.username })
       const passwordCorrect = vendor === null
         ? false
-        : await bcrypt.compare(args.password, vendor.passwordHash)
+        : await bcrypt.compare(args.password, vendor.password)
 
       if (!(vendor && passwordCorrect)) {
         throw new UserInputError("Wrong credentials!")
