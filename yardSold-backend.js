@@ -100,6 +100,7 @@ const typeDefs = gql`
 
   type Query {
     itemCount: Int!    
+    allItems2: String!
     allItems: [Item!]!
     allVendors: [Vendor!]!
     findItem(name: String!): Item
@@ -132,6 +133,8 @@ const typeDefs = gql`
       description: String
       profilePic: String
     ): Vendor
+
+    
     login(
       username: String!
       password: String!
@@ -144,6 +147,7 @@ const resolvers = {
 
     // Change allItems to retrieve Items from mongoDB, and not from dummy data
     allItems: () => items,
+    allItems2: (root, args) => items.find({}),
     allVendors: () => vendors,
     totalUniqueItems: () => items.length,
     me: (root, args, context) => {
@@ -191,15 +195,18 @@ const resolvers = {
     },
     createVendor: async (root, args) => {
       const saltRounds = 10
-      const passwordHash = await bcrypt.hash(args.password, saltRounds)
-      const vendor = new Vendor({ ...args, username: args.username, passwordHash })
+      const hashPassword = await bcrypt.hash(args.password, saltRounds)
+      const vendor = new Vendor({ ...args, username: args.username, password: hashPassword })
 
-      return vendor.save()
-        .catch(error => {
-          throw new UserInputError(error.message, {
+      try {
+        await vendor.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
             invalidArgs: args,
-          })
         })
+        
+      }
+      return vendor
     },
     login: async (root, args) => {
       const vendor = await Vendor.findOne({ username: args.username })

@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  passwordHash: {
+  password: {
     type: String,
     required: true,
   },
@@ -29,6 +29,12 @@ const schema = new mongoose.Schema({
     type: String,
     minlength: 5
   },
+  description: {
+    type: String,
+  },
+  profilePic: {
+    type: String
+},
   items: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Item'
