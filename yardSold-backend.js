@@ -184,6 +184,7 @@ const resolvers = {
         const photo = await cloudinary.v2.uploader.upload(args)
         // console.log(photo)
         console.log('Store in item images array: ',photo.secure_url)
+        // rename variable shadow
         let shadow  = items.find(a => a.name === `${args.itemName}`)
         shadow.images.push(photo.secure_url)
         return true
