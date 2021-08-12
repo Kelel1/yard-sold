@@ -3,13 +3,14 @@ const mongoose              = require('mongoose')
 const { v1: uuid }          = require('uuid')
 const express               = require('express')
 const cloudinary            = require('cloudinary')
-const Item                  = require('./models/item')
-const Vendor                = require('./models/vendor')
 const bcrypt                = require('bcrypt')
 const jwt                   = require('jsonwebtoken')
 const cors                  = require('cors')
 require('dotenv').config()
 
+
+const Item                  = require('./models/item')
+const Vendor                = require('./models/vendor')
 
 // Establish connection to Database
 mongoose.set('useFindAndModify', false)
