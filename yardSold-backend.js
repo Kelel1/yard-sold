@@ -1,24 +1,24 @@
-import { ApolloServer, gql, UserInputError, AuthenticationError } from 'apollo-server-express'
-import { set, connect }                                           from 'mongoose'
-import { v1 as uuid }                                             from 'uuid'
-import express                                                    from 'express'
-import { config, v2 }                                             from 'cloudinary'
-import { hash, compare }                                          from 'bcrypt'
-import { sign, verify }                                           from 'jsonwebtoken'
-import cors                                                       from 'cors'
+const { ApolloServer, gql, UserInputError, AuthenticationError } = require('apollo-server-express')
+const mongoose              = require('mongoose')
+const { v1: uuid }          = require('uuid')
+const express               = require('express')
+const cloudinary            = require('cloudinary')
+const bcrypt                = require('bcrypt')
+const jwt                   = require('jsonwebtoken')
+const cors                  = require('cors')
 require('dotenv').config()
 
 
-import Item                                                       from './models/item'
-import Vendor, { findOne, findById }                              from './models/vendor'
+const Item                  = require('./models/item')
+const Vendor                = require('./models/vendor')
 
 // Establish connection to Database
-set('useFindAndModify', false)
-set('useCreateIndex', true)
+mongoose.set('useFindAndModify', false)
+mongoose.set('useCreateIndex', true)
 
 console.log('connecting to', process.env.MONGODB_URI)
 
-connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('connected to MongoDB')
   })
@@ -34,7 +34,7 @@ connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: tr
  * 
  */
 
-config({
+cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET
@@ -182,7 +182,7 @@ const resolvers = {
       console.log(`${args}`)
 
       try {
-        const photo = await v2.uploader.upload(args)
+        const photo = await cloudinary.v2.uploader.upload(args)
         // console.log(photo)
         console.log('Store in item images array: ',photo.secure_url)
         // rename variable shadow
@@ -197,7 +197,7 @@ const resolvers = {
     },
     createVendor: async (root, args) => {
       const saltRounds = 10
-      const hashPassword = await hash(args.password, saltRounds)
+      const hashPassword = await bcrypt.hash(args.password, saltRounds)
       const vendor = new Vendor({ ...args, username: args.username, password: hashPassword })
 
       try {
@@ -211,10 +211,10 @@ const resolvers = {
       return vendor
     },
     login: async (root, args) => {
-      const vendor = await findOne({ username: args.username })
+      const vendor = await Vendor.findOne({ username: args.username })
       const passwordCorrect = vendor === null
         ? false
-        : await compare(args.password, vendor.password)
+        : await bcrypt.compare(args.password, vendor.password)
 
       if (!(vendor && passwordCorrect)) {
         throw new UserInputError("Wrong credentials!")
@@ -224,7 +224,7 @@ const resolvers = {
         username: vendor.username,
         id: vendor._id,
       }
-      return { value: sign(vendorForToken, process.env.JWT_SECRET) }
+      return { value: jwt.sign(vendorForToken, process.env.JWT_SECRET) }
     }    
   }
 }
@@ -235,10 +235,10 @@ const server = new ApolloServer({
   context: async ({ req }) => {
     const auth = req ? req.headers.authorization : null
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
-      const decodedToken = verify(
+      const decodedToken = jwt.verify(
         auth.substring(7), process.env.JWT_SECRET
       )
-      const currentVendor = await findById(decodedToken.id).populate('items')
+      const currentVendor = await Vendor.findById(decodedToken.id).populate('items')
       return { currentVendor }
     }
   }
