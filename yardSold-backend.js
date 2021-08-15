@@ -1,4 +1,4 @@
-const { ApolloServer, gql, UserInputError, AuthenticationError } = require('apollo-server-express')
+const { ApolloServer, UserInputError, AuthenticationError } = require('apollo-server-express')
 const mongoose              = require('mongoose')
 const { v1: uuid }          = require('uuid')
 const express               = require('express')
@@ -11,7 +11,7 @@ require('dotenv').config()
 
 const Item                  = require('./models/item')
 const Vendor                = require('./models/vendor')
-
+const typeDefs              = require('./graphql/typedefs')
 // Establish connection to Database
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
@@ -70,78 +70,6 @@ let items = [
 
 ]
 
-
-const typeDefs = gql`
-  type Vendor {   
-    username: String!
-    password: String!
-    name: String!
-    phone: String!        
-    email: String!
-    address: String
-    items: [Item!]
-    description: String!
-    profilePic: String!
-    id: ID!
-  }
-  type Token {
-    value: String!
-  }
-
-  type Item {
-    name: String!
-    price: String!
-    inventoryCount: Int!
-    images: [String!]
-    description: String
-    onHold: Boolean!
-    totalOnHold: Int!
-    id: ID!
-  }  
-
-  type Query {
-    itemCount: Int!    
-    allItems2: String!
-    allItems: [Item!]!
-    allVendors: [Vendor!]!
-    findItem(name: String!): Item
-    totalUniqueItems: Int!
-    me: Vendor
- 
-  }
-
-  type Mutation {
-    addItem(
-      name: String!
-      price: String!
-      inventoryCount: Int!
-      images: [String!]
-      description: String!
-      onHold: Boolean!
-      totalOnHold: Int!
-    ): Item
-
-    uploadImage(image: String! itemName: String!): Boolean
-
-    createVendor(
-      username: String!
-      password: String!
-      name: String
-      phone: String     
-      email: String
-      address: String
-      items: [String!]
-      description: String
-      profilePic: String
-    ): Vendor
-
-    
-    login(
-      username: String!
-      password: String!
-    ): Token    
-  }
-`
 const resolvers = {
   Query: {
     itemCount: () => 4,
