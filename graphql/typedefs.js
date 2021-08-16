@@ -30,7 +30,6 @@ module.exports =  gql`
 
   type Query {
     itemCount: Int!    
-    allItems2: String!
     allItems: [Item!]!
     allVendors: [Vendor!]!
     findItem(name: String!): Item

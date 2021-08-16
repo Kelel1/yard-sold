@@ -76,7 +76,6 @@ const resolvers = {
 
     // Change allItems to retrieve Items from mongoDB, and not from dummy data
     allItems: () => items,
-    allItems2: (root, args) => items.find({}),
     allVendors: () => vendors,
     totalUniqueItems: () => items.length,
     me: (root, args, context) => {
