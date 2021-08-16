@@ -72,8 +72,6 @@ let items = [
 
 const resolvers = {
   Query: {
-    itemCount: () => 4,
-
     // Change allItems to retrieve Items from mongoDB, and not from dummy data
     allItems: () => items,
     allVendors: () => vendors,
