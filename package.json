@@ -4,7 +4,7 @@
   "description": "Backend GraphQL server for Yard Sold web app ",
   "main": "index.js",
   "scripts": {
-    "start": "node yardSold-backend.js",
+    "start": "nodemon yardSold-backend.js",
     "dev": "nodemon yardSold-backend.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -31,6 +31,6 @@
     "uuid": "^8.2.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.12"
   }
 }
