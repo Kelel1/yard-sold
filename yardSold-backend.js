@@ -73,7 +73,7 @@ let items = [
 const resolvers = {
   Query: {
     // Change allItems to retrieve Items from mongoDB, and not from dummy data
-    allItems: () => items,
+    allItems: () => items.forEach(item => item),
     allVendors: () => vendors,
     totalUniqueItems: () => items.length,
     me: (root, args, context) => {
