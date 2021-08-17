@@ -1,17 +1,18 @@
 const { ApolloServer, UserInputError, AuthenticationError } = require('apollo-server-express')
-const mongoose              = require('mongoose')
-const { v1: uuid }          = require('uuid')
-const express               = require('express')
-const cloudinary            = require('cloudinary')
-const bcrypt                = require('bcrypt')
-const jwt                   = require('jsonwebtoken')
-const cors                  = require('cors')
-require('dotenv').config()
+const mongoose                                              = require('mongoose')
+const { v1: uuid }                                          = require('uuid')
+const express                                               = require('express')
+const cloudinary                                            = require('cloudinary')
+const bcrypt                                                = require('bcrypt')
+const jwt                                                   = require('jsonwebtoken')
+const cors                                                  = require('cors')
+                                                              require('dotenv').config()
 
 
-const Item                  = require('./models/item')
-const Vendor                = require('./models/vendor')
-const typeDefs              = require('./graphql/typedefs')
+const Item                                                  = require('./models/item')
+const Vendor                                                = require('./models/vendor')
+const typeDefs                                              = require('./graphql/typedefs')
+
 // Establish connection to Database
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
@@ -39,41 +40,11 @@ cloudinary.config({
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET
 })
-// Test vendor's list
-let vendors = [
-  {
-    username: "Kelel",
-    password: "kelder",
-    name: "Kane Elder",
-    phone: "948-555-4974",
-    email: "kelxty@gmail.com",
-    address: "10125 Rigs Rd, Adelki, Maryland, 57803",
-    items: [],
-    id: "afa51ab0-344d-11e9-a414-719c6709cf3e",
-  }
-
-]
-
-/**
- * Item must upload image to cloudinary bucket
- */
-// Test Item's list
-let items = [
-  {
-    name: "Shadow Tactics",
-    price: 3.99,
-    inventoryCount: 5,
-    description: "Top-Down stealth Playstation 4 game, set in medival Japan",
-    images: [],
-    id: "afa5b6f5-344d-11e9-a414-719c6709cf3e",
-  }
-
-]
 
 const resolvers = {
   Query: {
     // Change allItems to retrieve Items from mongoDB, and not from dummy data
-    allItems: () => items.forEach(item => item),
+    allItems: () => Item.collection.countDocuments(),
     allVendors: () => vendors,
     totalUniqueItems: () => items.length,
     me: (root, args, context) => {
@@ -99,7 +70,7 @@ const resolvers = {
           invalidArgs: args,
         })
       }
-      // items = items.concat(item)
+
       return item
     },
     uploadImage:  async (root, args) => {
@@ -135,6 +106,9 @@ const resolvers = {
       }
       return vendor
     },
+    
+    // TODO Implement register mutation
+
     login: async (root, args) => {
       const vendor = await Vendor.findOne({ username: args.username })
       const passwordCorrect = vendor === null
