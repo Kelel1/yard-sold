@@ -28,6 +28,14 @@ module.exports =  gql`
     id: ID!
   }  
 
+  input ResgisterInput{
+    username: String!
+    password: String!
+    confirmPassword: String!
+    email: String!
+
+  }
+
   type Query {
     itemCount: Int!    
     allItems: Int!
@@ -62,6 +70,8 @@ module.exports =  gql`
       description: String
       profilePic: String
     ): Vendor
+
+    register(registerInput: RegisgterInput): Vedor!
 
     
     login(
