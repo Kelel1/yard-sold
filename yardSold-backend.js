@@ -3,7 +3,7 @@ const mongoose                                              = require('mongoose'
 const { v1: uuid }                                          = require('uuid')
 const express                                               = require('express')
 const cloudinary                                            = require('cloudinary')
-const bcrypt                                                = require('bcrypt')
+// const bcrypt                                                = require('bcrypt')
 const jwt                                                   = require('jsonwebtoken')
 const cors                                                  = require('cors')
                                                               require('dotenv').config()
@@ -12,7 +12,7 @@ const cors                                                  = require('cors')
 const Item                                                  = require('./models/item')
 const Vendor                                                = require('./models/vendor')
 const typeDefs                                              = require('./graphql/typedefs')
-
+const resolvers                                             = require('./graphql/resolvers')
 // Establish connection to Database
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
@@ -41,92 +41,92 @@ cloudinary.config({
   api_secret: process.env.API_SECRET
 })
 
-const resolvers = {
-  Query: {
-    // Change allItems to retrieve Items from mongoDB, and not from dummy data
-    allItems: () => Item.collection.countDocuments(),
-    allVendors: () => vendors,
-    totalUniqueItems: () => items.length,
-    me: (root, args, context) => {
-      return context.currentVendor
-    }    
-  },
+// const resolvers = {
+//   Query: {
+//     // Change allItems to retrieve Items from mongoDB, and not from dummy data
+//     allItems: () => Item.collection.countDocuments(),
+//     allVendors: () => vendors,
+//     totalUniqueItems: () => items.length,
+//     me: (root, args, context) => {
+//       return context.currentVendor
+//     }    
+//   },
 
-  Mutation: {
-    addItem:  async (root, args, context) => {
-      const item = new Item({ ...args, id: uuid() })
-      const currentVendor = context.currentVendor
+//   Mutation: {
+    // addItem:  async (root, args, context) => {
+    //   const item = new Item({ ...args, id: uuid() })
+    //   const currentVendor = context.currentVendor
 
-      if (!currentVendor) {
-        throw new AuthenticationError("Not authenticated")
-      }
-      try {
-        await item.save()
-        // Try implementing this catch for upLoad image to see if it resolves issue
-        currentVendor.items = currentVendor.items.concat(item)
-        await currentVendor.save()
-      } catch (error) {
-        throw new UserInputError(error.message, {
-          invalidArgs: args,
-        })
-      }
+    //   if (!currentVendor) {
+    //     throw new AuthenticationError("Not authenticated")
+    //   }
+    //   try {
+    //     await item.save()
+    //     // Try implementing this catch for upLoad image to see if it resolves issue
+    //     currentVendor.items = currentVendor.items.concat(item)
+    //     await currentVendor.save()
+    //   } catch (error) {
+    //     throw new UserInputError(error.message, {
+    //       invalidArgs: args,
+    //     })
+    //   }
 
-      return item
-    },
-    uploadImage:  async (root, args) => {
-      args = `./testUpload/${args.image}`
-      console.log(`${args}`)
+    //   return item
+    // },
+    // uploadImage:  async (root, args) => {
+    //   args = `./testUpload/${args.image}`
+    //   console.log(`${args}`)
 
-      try {
-        const photo = await cloudinary.v2.uploader.upload(args)
-        // console.log(photo)
-        console.log('Store in item images array: ',photo.secure_url)
-        // rename variable shadow
-        let shadow  = items.find(a => a.name === `${args.itemName}`)
-        shadow.images.push(photo.secure_url)
-        return true
-      } catch(error) {
-        // Find out why this is returning false even when image successfully uploaded.
-        console.log('Kern, error: ', error.message)
-        return false
-      }
-    },
-    createVendor: async (root, args) => {
-      const saltRounds = 10
-      const hashPassword = await bcrypt.hash(args.password, saltRounds)
-      const vendor = new Vendor({ ...args, username: args.username, password: hashPassword })
+    //   try {
+    //     const photo = await cloudinary.v2.uploader.upload(args)
+    //     // console.log(photo)
+    //     console.log('Store in item images array: ',photo.secure_url)
+    //     // rename variable shadow
+    //     let shadow  = items.find(a => a.name === `${args.itemName}`)
+    //     shadow.images.push(photo.secure_url)
+    //     return true
+    //   } catch(error) {
+    //     // Find out why this is returning false even when image successfully uploaded.
+    //     console.log('Kern, error: ', error.message)
+    //     return false
+    //   }
+    // },
+    // createVendor: async (root, args) => {
+    //   const saltRounds = 10
+    //   const hashPassword = await bcrypt.hash(args.password, saltRounds)
+    //   const vendor = new Vendor({ ...args, username: args.username, password: hashPassword })
 
-      try {
-        await vendor.save()
-      } catch (error) {
-        throw new UserInputError(error.message, {
-            invalidArgs: args,
-        })
+    //   try {
+    //     await vendor.save()
+    //   } catch (error) {
+    //     throw new UserInputError(error.message, {
+    //         invalidArgs: args,
+    //     })
         
-      }
-      return vendor
-    },
+    //   }
+    //   return vendor
+    // },
     
-    // TODO Implement register mutation
+    // // TODO Implement register mutation
 
-    login: async (root, args) => {
-      const vendor = await Vendor.findOne({ username: args.username })
-      const passwordCorrect = vendor === null
-        ? false
-        : await bcrypt.compare(args.password, vendor.password)
+    // login: async (root, args) => {
+    //   const vendor = await Vendor.findOne({ username: args.username })
+    //   const passwordCorrect = vendor === null
+    //     ? false
+    //     : await bcrypt.compare(args.password, vendor.password)
 
-      if (!(vendor && passwordCorrect)) {
-        throw new UserInputError("Wrong credentials!")
-      }
+    //   if (!(vendor && passwordCorrect)) {
+    //     throw new UserInputError("Wrong credentials!")
+    //   }
 
-      const vendorForToken = {
-        username: vendor.username,
-        id: vendor._id,
-      }
-      return { value: jwt.sign(vendorForToken, process.env.JWT_SECRET) }
-    }    
-  }
-}
+    //   const vendorForToken = {
+    //     username: vendor.username,
+    //     id: vendor._id,
+    //   }
+    //   return { value: jwt.sign(vendorForToken, process.env.JWT_SECRET) }
+    // }    
+//   }
+// }
 
 const server = new ApolloServer({
   typeDefs,

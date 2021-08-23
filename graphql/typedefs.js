@@ -11,6 +11,7 @@ module.exports =  gql`
     items: [Item!]
     description: String!
     profilePic: String!
+    token: String!
     id: ID!
   }
   type Token {
@@ -28,7 +29,7 @@ module.exports =  gql`
     id: ID!
   }  
 
-  input ResgisterInput{
+  input RegisterInput{
     username: String!
     password: String!
     confirmPassword: String!
@@ -71,7 +72,7 @@ module.exports =  gql`
       profilePic: String
     ): Vendor
 
-    register(registerInput: RegisgterInput): Vedor!
+    register(registerInput: RegisterInput): Vendor!
 
     
     login(
