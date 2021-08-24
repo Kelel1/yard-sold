@@ -8,14 +8,15 @@ const Vendor                                                = require('../../mod
 
 module.exports = {
     Mutation: {
-        async register(_, { registerInput : { username, email, password, confirmPassword }
+      
+        register: async (_, { registerInput : { username, email, password, confirmPassword }
         },
           context,
           info
-        ) {
-            // TODO Validate vendor data
-            // TODO Make sute vendor doesn't already exist
-            // TODO hash password and create an auth token
+        ) => {
+            // TODO: Validate vendor data
+            // TODO: Make sute vendor doesn't already exist
+            // TODO: hash password and create an auth token
             const saltRounds = 12
             password = await bcrypt.hash(password, saltRounds);
 
