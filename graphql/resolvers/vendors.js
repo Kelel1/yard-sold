@@ -1,5 +1,6 @@
 const bcrypt                                                = require('bcrypt');
 const jwt                                                   = require('jsonwebtoken');
+const { UserInputError }                                    = require('apollo-server-express');
                                                               require('dotenv').config();
 
 
@@ -8,15 +9,25 @@ const Vendor                                                = require('../../mod
 
 module.exports = {
     Mutation: {
-      
-        register: async (_, { registerInput : { username, email, password, confirmPassword }
+
+        register: async (
+          
+          _,
+          { registerInput : { username, email, password, confirmPassword }
         },
           context,
           info
         ) => {
             // TODO: Validate vendor data
             // TODO: Make sute vendor doesn't already exist
-            // TODO: hash password and create an auth token
+            const vendor =  await Vendor.findOne({ username });
+            if(vendor){
+              throw new UserInputError('Username is taken', {
+                errors: {
+                  username: 'This username is taken'
+                }
+              })
+            }
             const saltRounds = 12
             password = await bcrypt.hash(password, saltRounds);
 
