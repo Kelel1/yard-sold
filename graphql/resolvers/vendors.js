@@ -3,7 +3,7 @@ const jwt                                                   = require('jsonwebto
 const { UserInputError }                                    = require('apollo-server-express');
                                                               require('dotenv').config();
 
-
+const { validateRegisterInput }                             = require('../../util/validator')
 const Vendor                                                = require('../../models/vendor');
 
 
@@ -15,11 +15,13 @@ module.exports = {
           _,
           { registerInput : { username, email, password, confirmPassword }
         },
-          context,
-          info
         ) => {
-            // TODO: Validate vendor data
-            // TODO: Make sute vendor doesn't already exist
+            const { valid, errors } = validateRegisterInput(email, password, confirmPassword);
+            if(!valid){
+              throw new UserInputError('Errors', { errors });
+            }
+        
+
             const vendor =  await Vendor.findOne({ username });
             if(vendor){
               throw new UserInputError('Username is taken', {
