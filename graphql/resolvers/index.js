@@ -6,6 +6,7 @@ export default {
         ...vendorResolvers.Query
     }, 
     Mutation: {
-        ...vendorResolvers.Mutation
+        ...vendorResolvers.Mutation,
+        ...itemResolvers.Mutation
     }
 }
