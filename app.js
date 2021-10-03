@@ -1,6 +1,6 @@
-import { ApolloServer, UserInputError, AuthenticationError } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 import   mongoose                                            from 'mongoose'
-import { v1 as uuid }                                        from 'uuid'
+// import { v1 as uuid }                                        from 'uuid'
 import express                                               from 'express'
 import cloudinary                                            from 'cloudinary'
 // import bcrypt                                                from 'bcrypt'
