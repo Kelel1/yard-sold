@@ -9,7 +9,9 @@ import cors                                                  from 'cors'
 
 import typeDefs                                              from './graphql/typedefs.js'
 import resolvers                                             from './graphql/resolvers/index.js'
+import dotenv from 'dotenv'
 
+dotenv.config()
 // Establish connection to Database
 mongoose.set('useFindAndModify', false)
 mongoose.set('useCreateIndex', true)
