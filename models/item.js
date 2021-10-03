@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
 /**
  * Monggos Schema for Item
@@ -31,4 +31,4 @@ const schema = new mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model('Item', schema)
+export default mongoose.model('Item', schema)

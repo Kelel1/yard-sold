@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Backend GraphQL server for Yard Sold web app ",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "nodemon yardSold-backend.js",
     "dev": "nodemon --inspect=0.0.0.0:9229 index.js",
@@ -39,6 +40,6 @@
     "@babel/preset-env": "^7.15.6",
     "@babel/register": "^7.15.3",
     "@babel/runtime": "^7.15.4",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.13"
   }
 }

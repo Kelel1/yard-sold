@@ -7,10 +7,8 @@ import cloudinary                                            from 'cloudinary'
 import jwt                                                   from 'jsonwebtoken'
 import cors                                                  from 'cors'
 
-import Item                                                  from './models/item'
-import Vendor                                                from './models/vendor'
-import typeDefs                                              from './graphql/typedefs'
-import resolvers                                             from './graphql/resolvers'
+import typeDefs                                              from './graphql/typedefs.js'
+import resolvers                                             from './graphql/resolvers/index.js'
 
 // Establish connection to Database
 mongoose.set('useFindAndModify', false)
@@ -47,13 +45,13 @@ const server = new ApolloServer({
       }
     }
   })
-  
+
+
   const app = express()
   app.use(cors())
   server.applyMiddleware({ app })
   
   app.listen({ port: 4000 }, () =>
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
+    //console.log(`🚀 Server ready at http://localhost:4000`)
   )
-  
-console.log("Hello World")

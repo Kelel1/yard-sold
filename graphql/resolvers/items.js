@@ -1,6 +1,6 @@
-const Item = require('../../models/item');
+import Item from '../../models/item.js'
 
-module.exports = {
+export default {
 
     Mutation: {
         addItem:  async (root, args, context) => {

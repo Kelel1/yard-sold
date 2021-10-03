@@ -1,7 +1,7 @@
-const itemResolvers   = require('./items');
-const vendorResolvers = require('./vendors');
+import itemResolvers   from './items.js'
+import vendorResolvers from './vendors.js'
 
-module.exports = {
+export default {
     Query: {
         ...vendorResolvers.Query
     }, 

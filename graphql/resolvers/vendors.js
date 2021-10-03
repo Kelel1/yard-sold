@@ -1,13 +1,12 @@
-const bcrypt                                                = require('bcrypt');
-const jwt                                                   = require('jsonwebtoken');
-const { UserInputError }                                    = require('apollo-server-express');
-                                                              require('dotenv').config();
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import { UserInputError } from 'apollo-server-express'
+import { validateRegisterInput } from '../../util/validator.js'
+import Vendor from '../../models/vendor.js'
+import dotenv from 'dotenv'
+dotenv.config()
 
-const { validateRegisterInput }                             = require('../../util/validator')
-const Vendor                                                = require('../../models/vendor');
-
-
-module.exports = {
+export default {
     Mutation: {
 
         register: async (

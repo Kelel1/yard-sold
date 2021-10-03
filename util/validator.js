@@ -1,4 +1,4 @@
-module.exports.validateRegisterInput = (
+const validateRegisterInput = (
     email,
     password,
     confirmPassword
@@ -23,3 +23,5 @@ module.exports.validateRegisterInput = (
         valid: Object.keys(errors).length < 1
     }
 }
+
+export { validateRegisterInput }
