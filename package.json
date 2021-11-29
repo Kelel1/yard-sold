@@ -2,10 +2,11 @@
   "name": "yard-sold",
   "version": "1.0.0",
   "description": "Backend GraphQL server for Yard Sold web app ",
-  "main": "index.js",
+  "main": "app.js",
+  "type": "module",
   "scripts": {
     "start": "nodemon yardSold-backend.js",
-    "dev": "nodemon --inspect=0.0.0.0:9229 index.js",
+    "dev": "nodemon --inspect=0.0.0.0:9229 app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
