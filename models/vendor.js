@@ -35,6 +35,9 @@ const schema = new mongoose.Schema({
   profilePic: {
     type: String
 },
+  createdAt: {
+    type: String
+},
   items: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Item'

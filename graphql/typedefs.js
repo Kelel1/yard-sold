@@ -8,6 +8,7 @@ export default gql`
     phone: String!        
     email: String!
     address: String
+    createdAt: String
     items: [Item!]
     description: String!
     profilePic: String!
