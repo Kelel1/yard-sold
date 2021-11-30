@@ -36,6 +36,7 @@ export default {
                 email,
                 username,
                 password,
+                createdAt: new Date().toISOString()
             });
 
             const res = await newVendor.save();
