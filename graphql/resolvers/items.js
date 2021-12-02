@@ -1,5 +1,5 @@
 import { v1 as uuid }                                        from 'uuid'
-import { UserInputError, AuthenticationError } from 'apollo-server-express'
+import { UserInputError, AuthenticationError }               from 'apollo-server-express'
 
 
 import Item from '../../models/item.js'
@@ -11,9 +11,10 @@ export default {
             const item = new Item({ ...args, id: uuid() })
             const currentVendor = context.currentVendor
       
-            // if (!currentVendor) {
-            //   throw new AuthenticationError("Not authenticated")
-            // }
+            // Must be logged in to add items
+            if (!currentVendor) {
+              throw new AuthenticationError("Not authenticated")
+            }
             try {
               await item.save()
               // Try implementing this catch for upLoad image to see if it resolves issue

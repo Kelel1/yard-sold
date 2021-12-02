@@ -1,15 +1,16 @@
 import { ApolloServer } from 'apollo-server-express'
 import   mongoose                                            from 'mongoose'
-// import { v1 as uuid }                                        from 'uuid'
+
 import express                                               from 'express'
 import cloudinary                                            from 'cloudinary'
-// import bcrypt                                                from 'bcrypt'
+
 import jwt                                                   from 'jsonwebtoken'
 import cors                                                  from 'cors'
 
 import typeDefs                                              from './graphql/typedefs.js'
 import resolvers                                             from './graphql/resolvers/index.js'
-import dotenv from 'dotenv'
+import dotenv                                                from 'dotenv'
+import Vendor                                                from './models/vendor.js'
 
 dotenv.config()
 // Establish connection to Database
@@ -55,5 +56,4 @@ const server = new ApolloServer({
   
   app.listen({ port: 4000 }, () =>
     console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-    //console.log(`🚀 Server ready at http://localhost:4000`)
   )
