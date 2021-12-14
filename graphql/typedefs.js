@@ -59,6 +59,10 @@ export default gql`
       totalOnHold: Int!
     ): Item
 
+    # deleteItem()
+
+    # updateItem()
+
     uploadImage(image: String! itemName: String!): Boolean
 
     createVendor(
