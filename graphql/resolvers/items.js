@@ -65,9 +65,15 @@ export default {
 
           uploadImage:  async (root, args) => {
             
+
+            // need to deconstruct args in order to read values
+            const test = { ...args, b: args.itemName}
             args = `./testUpload/${args.image}`
-            // console.log(`${args}`)
-            console.log(args.itemName)
+            
+            
+            console.log(test.b, " test")
+    
+       
       
             try {
               const photo = await cloudinary.uploader.upload(args)
