@@ -41,6 +41,15 @@ export default {
            *
            */
           // uploadImage:  async (root, args, context) => {
+
+            // const currentVendor = context.currentVendor
+      
+            // Must be logged in to add items
+            // if (!currentVendor) {
+            //   throw new AuthenticationError("Not authenticated")
+            // }
+
+            // currentVendor.items.find(a => a.name === args.itemName)
             
 
 
@@ -78,10 +87,10 @@ export default {
             try {
               const photo = await cloudinary.uploader.upload(args)
               
-              console.log('Store in item images array: ',photo.secure_url)
+              // console.log('Store in item images array: ',photo.secure_url)
              
-              // let shadowz  = Item.find(a => a.name === `${args.itemName}`)
-              // console.log(shadowz)
+              let shadowz  = Item.find(a => a.name === args.itemName)
+              console.log(shadowz.itemName)
 
               // shadow.images.push(photo.secure_url)
               return true
