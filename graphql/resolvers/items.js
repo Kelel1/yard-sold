@@ -32,6 +32,37 @@ export default {
       
             return item
           },
+
+          // New uploadImage
+          /**
+           *  Need to log in in order to add/edit  item photos
+           * 
+           *  
+           *
+           */
+          // uploadImage:  async (root, args, context) => {
+            
+
+
+          //   args = `./testUpload/${args.image}`
+          //   // console.log(`${args}`)
+          //   console.log(args.itemName)
+      
+          //   try {
+          //     const photo = await cloudinary.uploader.upload(args)
+              
+          //     console.log('Store in item images array: ',photo.secure_url)
+             
+              
+          //     return true
+          //   } catch(error) {
+          //     // Find out why this is returning false even when image successfully uploaded.
+          //     console.log('Kern, error: ', error.message)
+          //     return false
+          //   }
+          // },
+
+
           uploadImage:  async (root, args) => {
             
             args = `./testUpload/${args.image}`
