@@ -4,7 +4,7 @@ Bring your Yard Sale into the 21st Century!!!
 
 Deafault Test user:
 Username: Kelder
-password abcd
+password: abcd
 
 ### TO DO
 
@@ -23,4 +23,7 @@ password abcd
 
         - Delete image
      
-     
+  2. Finish second Implementation of add image for uploadImage resolver
+       
+       - 
+        
