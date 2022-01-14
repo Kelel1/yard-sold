@@ -63,7 +63,7 @@ export default gql`
 
     # updateItem()
 
-    uploadImage(image: String! itemName: String!): Boolean
+    uploadImage(itemName: String!): Boolean
 
     createVendor(
       username: String!

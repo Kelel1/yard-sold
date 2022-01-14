@@ -50,10 +50,11 @@ export default {
             // }
 
             // currentVendor.items.find(a => a.name === args.itemName)
+            // vendorGoods = currentVendor.items
             
 
 
-          //   args = `./testUpload/${args.image}`
+          //   args = `./testUpload/${args.itemName}`
           //   // console.log(`${args}`)
           //   console.log(args.itemName)
       
@@ -77,7 +78,7 @@ export default {
 
             // need to deconstruct args in order to read values
             const test = { ...args, b: args.itemName}
-            args = `./testUpload/${args.image}`
+            args = `./testUpload/${args.itemName}`
             
             
             console.log(test.b, " test")
