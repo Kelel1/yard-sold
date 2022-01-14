@@ -76,17 +76,11 @@ export default {
           uploadImage:  async (root, args) => {
             
 
-            // need to deconstruct args in order to read values
-            const test = { ...args, b: args.itemName}
-            args = `./testUpload/${args.itemName}`
-            
-            
-            console.log(test.b, " test")
     
-       
-      
+            const image  = `./testUpload/${args.itemName}`
+         
             try {
-              const photo = await cloudinary.uploader.upload(args)
+              const photo = await cloudinary.uploader.upload(image)
               
               // console.log('Store in item images array: ',photo.secure_url)
              
