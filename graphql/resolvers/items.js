@@ -33,61 +33,34 @@ export default {
             return item
           },
 
-          // New uploadImage
-          /**
-           *  Need to log in in order to add/edit  item photos
-           * 
-           *  
-           *
-           */
-          // uploadImage:  async (root, args, context) => {
+          uploadImage:  async (root, args, context) => {
 
-            // const currentVendor = context.currentVendor
-      
-            // Must be logged in to add items
-            // if (!currentVendor) {
-            //   throw new AuthenticationError("Not authenticated")
-            // }
-
-            // currentVendor.items.find(a => a.name === args.itemName)
-            // vendorGoods = currentVendor.items
-            
-
-
-          //   args = `./testUpload/${args.itemName}`
-          //   // console.log(`${args}`)
-          //   console.log(args.itemName)
-      
-          //   try {
-          //     const photo = await cloudinary.uploader.upload(args)
-              
-          //     console.log('Store in item images array: ',photo.secure_url)
-             
-              
-          //     return true
-          //   } catch(error) {
-          //     // Find out why this is returning false even when image successfully uploaded.
-          //     console.log('Kern, error: ', error.message)
-          //     return false
-          //   }
-          // },
-
-
-          uploadImage:  async (root, args) => {
-            
-
-    
             const image  = `./testUpload/${args.itemName}`
+
+            // Must be logged-in to upload item images
+
+            const currentVendor = context.currentVendor
+
+            
+
+            if (!currentVendor) {
+              throw new AuthenticationError("Not authenticated")
+            }
+
+     
+            const photo = await cloudinary.uploader.upload(image)
+
+         
+            const itm = await Item.findOne({ name : args.itemName})
+            
+            itm.images = itm.images.concat(`${photo.secure_url}`)
+            console.log(itm)
+
          
             try {
-              const photo = await cloudinary.uploader.upload(image)
-              
-              // console.log('Store in item images array: ',photo.secure_url)
-             
-              let shadowz  = Item.find(a => a.name === args.itemName)
-              console.log(shadowz.itemName)
 
-              // shadow.images.push(photo.secure_url)
+              await itm.save()
+
               return true
             } catch(error) {
               // Find out why this is returning false even when image successfully uploaded.
