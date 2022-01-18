@@ -9,7 +9,7 @@ password: abcd
 ### TO DO
 
 
-- Modularize Backend
+- ~~Modularize Backend~~
 
 
 
@@ -22,8 +22,21 @@ password: abcd
         - Edit item/vendor
 
         - Delete image
+
+        - Delete Item
+
+        - Delete User Account
+
+        - Change password
      
-  2. Finish second Implementation of add image for uploadImage resolver
+  2. ~~Finish second Implementation of add image for uploadImage resolver~~
        
        - 
         
+
+
+
+
+Road Map:
+
+Convert all JS to TypseScript
