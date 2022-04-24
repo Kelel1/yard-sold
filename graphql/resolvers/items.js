@@ -33,6 +33,13 @@ export default {
             return item
           },
 
+          /**
+           * 
+           * Need to implement way to name image images before they are uploaded to cloudinary
+           *
+           *  
+           */
+
           uploadImage:  async (root, args, context) => {
 
             const image  = `./testUpload/${args.itemName}`
