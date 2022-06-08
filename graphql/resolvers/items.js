@@ -32,21 +32,42 @@ export default {
       
             return item
           },
-          uploadImage:  async (root, args) => {
-            
-            args = `./testUpload/${args.image}`
-            // console.log(`${args}`)
-            console.log(args.itemName)
-      
-            try {
-              const photo = await cloudinary.uploader.upload(args)
-              
-              console.log('Store in item images array: ',photo.secure_url)
-             
-              // let shadowz  = Item.find(a => a.name === `${args.itemName}`)
-              // console.log(shadowz)
 
-              // shadow.images.push(photo.secure_url)
+          /**
+           * 
+           * Need to implement way to name image images before they are uploaded to cloudinary
+           *
+           *  
+           */
+
+          uploadImage:  async (root, args, context) => {
+
+            const image  = `./testUpload/${args.itemName}`
+
+            // Must be logged-in to upload item images
+
+            const currentVendor = context.currentVendor
+
+            
+
+            if (!currentVendor) {
+              throw new AuthenticationError("Not authenticated")
+            }
+
+     
+            const photo = await cloudinary.uploader.upload(image)
+
+         
+            const itm = await Item.findOne({ name : args.itemName})
+            
+            itm.images = itm.images.concat(`${photo.secure_url}`)
+            console.log(itm)
+
+         
+            try {
+
+              await itm.save()
+
               return true
             } catch(error) {
               // Find out why this is returning false even when image successfully uploaded.
