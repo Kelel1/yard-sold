@@ -41,7 +41,7 @@ export default gql`
   type Query {
     itemCount: Int!    
     allItems: Int!
-    allVendors: [Vendor!]!
+    allVendors: Int!
     findItem(name: String!): Item
     totalUniqueItems: Int!
     me: Vendor

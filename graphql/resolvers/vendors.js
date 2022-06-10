@@ -7,6 +7,25 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 export default {
+
+    Query: {
+//    allVendors test query
+      allVendors: async () => {
+        try {
+          const vend = (await Vendor.find()).length
+          return vend
+        } catch(err) {
+
+          throw new Error(err)
+
+        }
+      },
+
+      me: async (root, args, context) => {
+        return context.currentVendor
+      }
+
+    }, 
     Mutation: {
 
         register: async (
