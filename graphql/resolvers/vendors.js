@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { UserInputError } from 'apollo-server-express'
+import { AuthenticationError, UserInputError } from 'apollo-server-express'
 import { validateRegisterInput } from '../../util/validator.js'
 import Vendor from '../../models/vendor.js'
 import dotenv from 'dotenv'
@@ -23,6 +23,14 @@ export default {
 
       me: async (root, args, context) => {
         return context.currentVendor
+      },
+
+      fetchItems: async (root, args, context) => {
+
+        if (!context.currentVendor) {
+          throw new AuthenticationError('not authenticated');
+        }
+
       }
 
     }, 
@@ -90,6 +98,5 @@ export default {
             return { value: jwt.sign(vendorForToken, process.env.JWT_SECRET) }
         }
 
-        
     }
 }
