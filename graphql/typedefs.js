@@ -9,7 +9,7 @@ export default gql`
     email: String!
     address: String
     createdAt: String
-    items: [Item!]
+    items: [Item]
     description: String!
     profilePic: String!
     token: String!
@@ -44,7 +44,7 @@ export default gql`
     allVendors: Int!
     findItem(name: String!): Item
     totalUniqueItems: Int!
-    fetchItems: [Item]
+    fetchItems: [Item!]!
     me: Vendor
  
   }
