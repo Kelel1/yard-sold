@@ -27,21 +27,20 @@ export default {
 
       fetchItems: async (root, args, context) => {
 
-        const currentVendor = context.currentVendor;
+        const currentVendor = await context.currentVendor;
 
         if (!context.currentVendor) {
           throw new AuthenticationError('not authenticated');
         }
 
         try {
-          currentVendor.items;
-        } catch (error) {
-          throw new UserInputError(error.message, {
-            invalidArgs: args,
-          })
-        }
+          const items = await currentVendor.items;
+          return items;
+        } catch(err) {
 
-        return currentVendor.items;
+          throw new Error(err)
+
+        }
 
       }
 
