@@ -14,12 +14,10 @@ import Vendor                                                from './models/vend
 
 dotenv.config()
 // Establish connection to Database
-mongoose.set('useFindAndModify', false)
-mongoose.set('useCreateIndex', true)
 
 console.log('connecting to', process.env.MONGODB_URI)
 
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true })
   .then(() => {
     console.log('connected to MongoDB')
   })
