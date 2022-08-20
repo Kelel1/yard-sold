@@ -44,7 +44,7 @@ export default gql`
     allVendors: Int!
     findItem(name: String!): Item
     totalUniqueItems: Int!
-    fetchItems: [Item!]!
+    fetchItems: [Item]!
     me: Vendor
  
   }

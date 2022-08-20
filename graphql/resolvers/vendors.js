@@ -22,29 +22,35 @@ export default {
       },
 
       me: async (root, args, context) => {
-        return context.currentVendor
+        try {
+          return context.currentVendor
+        } catch(err) {
+          throw new Error(err)
+        }
       },
 
       fetchItems: async (root, args, context) => {
 
-        const currentVendor = await context.currentVendor;
+          const currentVendor = await context.currentVendor;
 
-        if (!context.currentVendor) {
-          throw new AuthenticationError('not authenticated');
-        }
+          if (!currentVendor) {
+            throw new AuthenticationError('not authenticated');
+          }
 
-        try {
-          const items = await currentVendor.items;
-          return items;
-        } catch(err) {
+          try {
+            const itemList = await currentVendor.items;
+            return itemList;
+             
+          } catch (error) {
+            throw new UserInputError(error.message, {
+              invalidArgs: args,
+            })
+        
 
-          throw new Error(err)
+    }
 
-        }
-
-      }
-
-    }, 
+  }
+  }, 
     Mutation: {
 
         register: async (
