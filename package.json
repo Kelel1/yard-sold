@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/Kelel1/yard-sold#readme",
   "dependencies": {
-    "apollo-server-express": "^3.10.1",
+    "apollo-server-express": "^2.16.0",
     "bcrypt": "^5.0.0",
     "cloudinary": "^1.22.0",
     "cors": "^2.8.5",
