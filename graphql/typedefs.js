@@ -56,7 +56,7 @@ export default gql`
       inventoryCount: Int!
       images: [String!]
       description: String!
-      onHold: Boolean!
+      onHold: Boolean
       totalOnHold: Int!
     ): Item
 
