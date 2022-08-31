@@ -63,7 +63,7 @@ mutation {
      
   2. - [x] Finish second Implementation of add image for uploadImage resolver
        
-       - 
+  3. - [x] Investigate/fix current issue with token not user token not expiring after set time
         
 # Long term
 - - [] Switch codebase over to typescript
