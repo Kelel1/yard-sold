@@ -66,6 +66,6 @@ mutation {
   3. - [x] Investigate/fix current issue with token not user token not expiring after set time
         
 # Long term
-- - [] Switch codebase over to typescript
-- - [] Implement CI/CD
-- - [] Implment containerization
+- - [ ] Switch codebase over to typescript
+- - [ ] Implement CI/CD
+- - [ ] Implment containerization
