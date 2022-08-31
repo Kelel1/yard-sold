@@ -38,10 +38,10 @@ mutation {
 
 }
 
-### TO DO
+### Roadmap
 
-
-- ~~Modularize Backend~~
+# Short Term
+- -[x] Modularize Backend
 
 
 
@@ -61,14 +61,11 @@ mutation {
 
         - Change password
      
-  2. ~~Finish second Implementation of add image for uploadImage resolver~~
+  2. - [x] Finish second Implementation of add image for uploadImage resolver
        
        - 
         
-
-
-
-
-Road Map:
-
-Convert all JS to TypseScript
+# Long term
+- - [] Switch codebase over to typescript
+- - [] Implement CI/CD
+- - [] Implment containerization
