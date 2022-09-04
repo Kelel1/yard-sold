@@ -61,7 +61,7 @@ mutation {
 
         - Change password
      
-  2. ~~Finish second Implementation of add image for uploadImage resolver~~
+  2. - -[x]Finish second Implementation of add image for uploadImage resolver
        
        - 
         
